@@ -6,7 +6,7 @@ import fakeAPI from '../fakeAPI'
 export const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {
     try {
         const data = await fakeAPI.fetchBooks()
-        console.log(data)
+        return data
     }
     catch (error) {
         throw error
@@ -18,7 +18,7 @@ const bookSlice = createSlice({
     initialState: [],
     reducers: {
         addBook: (state, action) => {
-            return state.push({ id: Date.now(), ...action.payload })
+            state.push({ id: Date.now(), ...action.payload })
         },
         deleteBook: (state, action) => {
             return state.filter((book) => book.id !== action.payload.id)
@@ -30,11 +30,11 @@ const bookSlice = createSlice({
             .addCase(fetchBooks.fulfilled, (state, action) => {
                 return [...action.payload]
             })
-            .addCase(fetchBooks.rejected,(state,action)=>{
+            .addCase(fetchBooks.rejected, (state, action) => {
                 console.error('failed to fetch books', action.error)
             })
     }
 })
 
-export const {addBook,deleteBook} = bookSlice.actions
+export const { addBook, deleteBook } = bookSlice.actions
 export default bookSlice.reducer
